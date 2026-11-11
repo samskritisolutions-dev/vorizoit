@@ -26,7 +26,6 @@ export default function VorizoSite() {
       gestureOrientation: "vertical",
       smoothWheel: true,
       wheelMultiplier: 0.9,
-      touchMultiplier: 1.8,
     });
 
     let animationFrameId: number;

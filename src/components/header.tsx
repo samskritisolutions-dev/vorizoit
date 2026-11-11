@@ -9,7 +9,7 @@ export function Header() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <>
+    <div className="site-header-sticky-wrap">
       <div className="announcement">
         <span className="pulse" /> Building what’s next, together{" "}
         <span className="announcement-right">US · INDIA · GLOBAL DELIVERY</span>
@@ -52,6 +52,6 @@ export function Header() {
           </a>
         </nav>
       </header>
-    </>
+    </div>
   );
 }

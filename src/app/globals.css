@@ -22,8 +22,9 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 90px;
+    scroll-padding-top: 100px;
     -webkit-text-size-adjust: 100%;
+    overflow-x: clip;
 }
 
 body {
@@ -35,6 +36,11 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    overflow-x: clip;
+}
+
+main {
+    overflow-x: clip;
 }
 
 h1, h2, h3, h4, .brand-mark {
@@ -91,6 +97,14 @@ a {
     }
 }
 
+.site-header-sticky-wrap {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+}
+
 .site-header {
     height: 82px;
     padding: 0 max(40px, calc((100% - 1240px)/2));
@@ -98,11 +112,10 @@ a {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--line);
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background: #f7f8f4ed;
-    backdrop-filter: blur(14px)
+    position: relative;
+    background: rgba(247, 248, 244, 0.94);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
 .brand {
@@ -818,8 +831,8 @@ a {
 .ind-header {
     display: grid;
     grid-template-columns: 1fr 1.08fr;
-    gap: 70px;
-    align-items: end;
+    gap: 50px;
+    align-items: start;
     padding-top: 55px;
     padding-bottom: 50px;
     border-bottom: 1px solid #2b3d32;
@@ -1811,7 +1824,7 @@ a {
 
 @media(max-width:680px) {
     html, body {
-        overflow-x: hidden;
+        overflow-x: clip;
     }
 
     .announcement {
