@@ -1,0 +1,23 @@
+{
+  "name": "vorizo-infotech-next",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": { "dev": "next dev", "build": "next build", "start": "next start", "lint": "eslint ." },
+  "dependencies": {
+    "@studio-freight/lenis": "^1.0.42",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.577.0",
+    "motion": "^12.23.24",
+    "next": "^16.4.5",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.0",
+    "eslint-config-next": "^16.4.5",
+    "typescript": "^5.9.3"
+  }
+}
