@@ -803,8 +803,10 @@ a {
     inset: 0;
     background-image: 
         radial-gradient(circle at 80% 20%, rgba(216, 255, 87, 0.04) 0%, transparent 40%),
-        radial-gradient(circle at 20% 80%, rgba(216, 255, 87, 0.03) 0%, transparent 50%);
-    background-size: 100% 100%, 100% 100%;
+        radial-gradient(circle at 20% 80%, rgba(216, 255, 87, 0.03) 0%, transparent 50%),
+        linear-gradient(#26382e18 1px, transparent 1px), 
+        linear-gradient(90deg, #26382e18 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 36px 36px, 36px 36px;
     pointer-events: none;
 }
 
@@ -821,8 +823,6 @@ a {
     padding-top: 55px;
     padding-bottom: 50px;
     border-bottom: 1px solid #2b3d32;
-    position: relative;
-    z-index: 2;
 }
 
 .ind-badge-wrap {

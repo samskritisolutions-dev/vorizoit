@@ -80,10 +80,6 @@ export function IndustriesSection() {
 
         <div className="ind-header">
           <Reveal>
-            <div className="ind-badge-wrap">
-              <span className="ind-badge">SECTOR ARCHITECTURE</span>
-              <span className="ind-badge-sub">Deep domain expertise · Enterprise compliance</span>
-            </div>
             <h2>
               Different worlds.
               <br />
