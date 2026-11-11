@@ -4,18 +4,24 @@ import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "../reveal";
 
 const jobs = [
-  [
-    "Software Engineer",
-    "Build impactful solutions with modern technologies.",
-  ],
-  [
-    "Frontend Developer",
-    "Create intuitive interfaces and thoughtful digital experiences.",
-  ],
-  [
-    "Backend Developer",
-    "Develop reliable systems that power great products.",
-  ],
+  {
+    title: "Software Engineer",
+    type: "ENGINEERING",
+    location: "HYDERABAD / FLEXIBLE",
+    desc: "Build impactful solutions with modern technologies and scalable cloud architectures.",
+  },
+  {
+    title: "Frontend Developer",
+    type: "ENGINEERING",
+    location: "HYDERABAD / FLEXIBLE",
+    desc: "Create intuitive, high-performance interfaces and thoughtful digital experiences.",
+  },
+  {
+    title: "Backend Developer",
+    type: "ENGINEERING",
+    location: "HYDERABAD / FLEXIBLE",
+    desc: "Develop reliable, resilient systems and microservices that power enterprise products.",
+  },
 ];
 
 export function CareersSection() {
@@ -27,7 +33,7 @@ export function CareersSection() {
           <span>MAKE YOUR NEXT MOVE</span>
         </div>
         <div className="careers-head">
-          <div>
+          <Reveal>
             <h2>
               Good work starts
               <br />
@@ -37,29 +43,35 @@ export function CareersSection() {
               Grow your skills, take on meaningful challenges and build
               what’s next with Vorizo.
             </p>
-          </div>
-          <a
-            className="button button-dark"
-            href="mailto:rakeshm@vorizoit.com?subject=Careers%20at%20Vorizo"
-          >
-            Share your profile <ArrowUpRight size={17} />
-          </a>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <a
+              className="button button-dark"
+              href="mailto:rakeshm@vorizoit.com?subject=Careers%20at%20Vorizo"
+            >
+              Share your profile <ArrowUpRight size={17} />
+            </a>
+          </Reveal>
         </div>
         <div className="job-list">
-          {jobs.map(([title, desc]) => (
-            <Reveal key={title} className="job-card">
-              <div>
-                <span className="job-type">ENGINEERING</span>
-                <h3>{title}</h3>
-                <p>{desc}</p>
+          {jobs.map((job, idx) => (
+            <Reveal key={job.title} delay={idx * 0.08} className="job-card">
+              <div className="job-main">
+                <span className="job-type">{job.type}</span>
+                <h3>{job.title}</h3>
+                <p>{job.desc}</p>
               </div>
-              <span className="job-meta">HYDERABAD / FLEXIBLE</span>
-              <a
-                href={`mailto:rakeshm@vorizoit.com?subject=${encodeURIComponent(`${title} Application`)}`}
-                aria-label={`Apply for ${title}`}
-              >
-                <ArrowUpRight size={18} />
-              </a>
+              <div className="job-action-wrap">
+                <span className="job-meta">{job.location}</span>
+                <a
+                  href={`mailto:rakeshm@vorizoit.com?subject=${encodeURIComponent(`${job.title} Application`)}`}
+                  aria-label={`Apply for ${job.title}`}
+                  className="job-apply-link"
+                >
+                  <span>Apply</span>
+                  <ArrowUpRight size={15} />
+                </a>
+              </div>
             </Reveal>
           ))}
         </div>
