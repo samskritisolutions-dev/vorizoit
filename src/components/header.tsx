@@ -4,14 +4,14 @@ import { useState } from "react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { Brand } from "./brand";
 
-export function Header() {
+export function Header({ announcement }: { announcement?: string | null }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
 
   return (
     <div className="site-header-sticky-wrap">
       <div className="announcement">
-        <span className="pulse" /> Building what’s next, together{" "}
+        <span className="pulse" /> {announcement || "Building what’s next, together"}{" "}
         <span className="announcement-right">US · INDIA · GLOBAL DELIVERY</span>
       </div>
       <header className="site-header" id="top">

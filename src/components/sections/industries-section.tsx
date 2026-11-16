@@ -11,7 +11,22 @@ import {
 } from "lucide-react";
 import { Reveal } from "../reveal";
 
-const industries = [
+export interface IndustryDoc {
+  id?: string | number;
+  number?: string | null;
+  category: string;
+  title: string;
+  headline?: string | null;
+  desc?: string | null;
+  description?: string | null;
+  tags?: { tag: string }[] | null;
+  features?: { item?: string }[] | null;
+  isAction?: boolean | null;
+}
+
+const defaultIcons = [HeartPulse, ShoppingBag, Landmark, Factory, Compass, Sparkles];
+
+const fallbackIndustries = [
   {
     n: "01",
     category: "HEALTHCARE",
@@ -20,6 +35,7 @@ const industries = [
     desc: "HIPAA-ready telehealth platforms, EHR integrations, patient telemetry, and secure cloud infrastructure designed for healthcare providers.",
     tags: ["HIPAA & FHIR APIs", "Patient Portals", "Clinical Telemetry"],
     icon: HeartPulse,
+    isAction: false,
   },
   {
     n: "02",
@@ -29,6 +45,7 @@ const industries = [
     desc: "Headless commerce architectures, real-time inventory sync across channels, sub-second search engines, and omnichannel checkout workflows.",
     tags: ["Headless Commerce", "Omnichannel POS", "Real-Time Catalog"],
     icon: ShoppingBag,
+    isAction: false,
   },
   {
     n: "03",
@@ -38,6 +55,7 @@ const industries = [
     desc: "PCI-DSS compliant payment gateways, automated reconciliation engines, fraud analytics, and bank-grade zero-trust cloud microservices.",
     tags: ["PCI-DSS & SOC 2", "Fraud Detection", "Ledger Accounting"],
     icon: Landmark,
+    isAction: false,
   },
   {
     n: "04",
@@ -47,6 +65,7 @@ const industries = [
     desc: "IIoT sensor telemetry, factory-floor dashboards, predictive maintenance monitoring, and seamless ERP/supply-chain synchronization.",
     tags: ["IIoT Telemetry", "Predictive Alerts", "ERP Integration"],
     icon: Factory,
+    isAction: false,
   },
   {
     n: "05",
@@ -56,6 +75,7 @@ const industries = [
     desc: "Direct reservation engines, keyless mobile check-in APIs, multi-property management dashboards, and automated guest communication channels.",
     tags: ["Smart Reservations", "Mobile Check-In", "Property Ops"],
     icon: Compass,
+    isAction: false,
   },
   {
     n: "06",
@@ -69,7 +89,33 @@ const industries = [
   },
 ];
 
-export function IndustriesSection() {
+export function IndustriesSection({ items }: { items?: IndustryDoc[] }) {
+  const industryList =
+    items && items.length > 0
+      ? items.map((doc, idx) => {
+          const num = doc.number || String(idx + 1).padStart(2, "0");
+          const Icon = defaultIcons[idx % defaultIcons.length];
+          const rawTags =
+            doc.tags && doc.tags.length > 0
+              ? doc.tags.map((t) => t.tag)
+              : (doc.features || [])
+                  .map((f) => (typeof f === "string" ? f : f.item))
+                  .filter(Boolean) as string[];
+          const isAction = doc.isAction ?? idx === items.length - 1;
+
+          return {
+            n: num,
+            category: doc.category || "ENTERPRISE",
+            title: doc.title,
+            headline: doc.headline || "Tailored software & enterprise architecture",
+            desc: doc.desc || doc.description || "",
+            tags: rawTags.length > 0 ? rawTags : ["Custom Cloud", "API Architecture", "Security Rigor"],
+            icon: Icon,
+            isAction,
+          };
+        })
+      : fallbackIndustries;
+
   return (
     <section className="industries section-pad" id="industries">
       <div className="section-wrap">
@@ -104,7 +150,7 @@ export function IndustriesSection() {
         </div>
 
         <div className="ind-grid">
-          {industries.map((ind, i) => (
+          {industryList.map((ind, i) => (
             <Reveal
               key={ind.n}
               delay={i * 0.05}

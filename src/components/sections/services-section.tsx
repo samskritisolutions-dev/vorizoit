@@ -4,7 +4,48 @@ import { motion } from "motion/react";
 import { BarChart3, BrainCircuit, Code2, Database } from "lucide-react";
 import { Reveal } from "../reveal";
 
-const services = [
+export interface ServiceDoc {
+  id?: string | number;
+  number?: string | null;
+  title: string;
+  kicker?: string | null;
+  category?: string | null;
+  desc?: string | null;
+  description?: string | null;
+  image?: string | null;
+  tags?: { tag: string }[] | null;
+  capabilities?: { item?: string }[] | null;
+}
+
+const defaultIcons = [Code2, BrainCircuit, BarChart3, Database];
+const defaultImages = [
+  {
+    url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1000&q=80",
+    alt: "Software development and cloud solutions",
+    tag: "ENGINEERING",
+    n: "01 / BUILD",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=80",
+    alt: "Technology consulting and digital strategy",
+    tag: "STRATEGY",
+    n: "02 / ADVISE",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
+    alt: "Web-based interactive dashboards",
+    tag: "VISUALIZATION",
+    n: "03 / UNDERSTAND",
+  },
+  {
+    url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+    alt: "Business intelligence and analytics tools",
+    tag: "INTELLIGENCE",
+    n: "04 / OPTIMIZE",
+  },
+];
+
+const fallbackServices = [
   {
     n: "01 / BUILD",
     title: "IT Services",
@@ -63,7 +104,35 @@ const services = [
   },
 ];
 
-export function ServicesSection() {
+export function ServicesSection({ items }: { items?: ServiceDoc[] }) {
+  const serviceList =
+    items && items.length > 0
+      ? items.map((doc, idx) => {
+          const defaults = defaultImages[idx % defaultImages.length];
+          const Icon = defaultIcons[idx % defaultIcons.length];
+          const rawTags =
+            doc.tags && doc.tags.length > 0
+              ? doc.tags.map((t) => t.tag)
+              : (doc.capabilities || [])
+                  .map((c) => (typeof c === "string" ? c : c.item))
+                  .filter(Boolean) as string[];
+
+          return {
+            n: doc.number || defaults.n,
+            title: doc.title,
+            desc: doc.desc || doc.description || "",
+            items:
+              rawTags.length > 0
+                ? rawTags
+                : ["Enterprise Solution", "High Performance Architecture", "Dedicated Engineering"],
+            icon: Icon,
+            image: doc.image || defaults.url,
+            imageAlt: doc.title,
+            tag: doc.kicker || doc.category || defaults.tag,
+          };
+        })
+      : fallbackServices;
+
   return (
     <section className="services section-pad" id="services">
       <div className="section-wrap">
@@ -84,7 +153,7 @@ export function ServicesSection() {
           </p>
         </div>
         <div className="service-grid">
-          {services.map((service, i) => (
+          {serviceList.map((service, i) => (
             <Reveal
               key={service.title}
               delay={i * 0.07}

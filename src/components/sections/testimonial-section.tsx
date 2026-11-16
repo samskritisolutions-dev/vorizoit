@@ -4,18 +4,20 @@ import { useCallback, useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
-interface Testimonial {
-  id: string;
+export interface TestimonialItem {
+  id?: string | number;
+  idNumber?: string | null;
   quote: string;
   author: string;
   role: string;
-  avatar: string;
-  source: string;
+  avatar?: string | null;
+  source?: string | null;
 }
 
-const TESTIMONIALS: Testimonial[] = [
+const TESTIMONIALS: TestimonialItem[] = [
   {
     id: "01",
+    idNumber: "01",
     quote:
       "My experience has been both professionally enriching and personally fulfilling. The company fosters a collaborative work environment that encourages innovation, continuous learning, and growth.",
     author: "Dinesh Kumar",
@@ -25,6 +27,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: "02",
+    idNumber: "02",
     quote:
       "Vorizo transformed our legacy systems into a resilient, high-throughput cloud environment ahead of schedule. Their engineering squads operated seamlessly as a natural extension of our leadership and core team.",
     author: "Marcus Vance",
@@ -34,6 +37,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: "03",
+    idNumber: "03",
     quote:
       "The clarity and security rigor Vorizo brought to our data governance pipeline was exceptional. Real-time telemetry and clean architecture allowed us to scale across 12 countries with total confidence.",
     author: "Elena Rostova",
@@ -43,6 +47,7 @@ const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: "04",
+    idNumber: "04",
     quote:
       "Their US strategy paired with India delivery scale gave us the speed, technical precision, and 24/7 momentum we needed. Vorizo is one of the rare technology partners who truly deliver what they commit to.",
     author: "David Henderson",
@@ -52,19 +57,18 @@ const TESTIMONIALS: Testimonial[] = [
   },
 ];
 
-export function TestimonialSection() {
+export function TestimonialSection({ items }: { items?: TestimonialItem[] }) {
+  const list = items && items.length > 0 ? items : TESTIMONIALS;
   const [current, setCurrent] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
   const next = useCallback(() => {
-    setCurrent((prev) => (prev + 1) % TESTIMONIALS.length);
-  }, []);
+    setCurrent((prev) => (prev + 1) % list.length);
+  }, [list.length]);
 
   const prev = useCallback(() => {
-    setCurrent(
-      (prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length
-    );
-  }, []);
+    setCurrent((prev) => (prev - 1 + list.length) % list.length);
+  }, [list.length]);
 
   useEffect(() => {
     if (isPaused) return;
@@ -74,7 +78,19 @@ export function TestimonialSection() {
     return () => clearInterval(timer);
   }, [isPaused, next]);
 
-  const activeItem = TESTIMONIALS[current];
+  const safeIdx = current % list.length;
+  const activeItem = list[safeIdx] || list[0] || TESTIMONIALS[0];
+  const displayId = activeItem.idNumber || String(safeIdx + 1).padStart(2, "0");
+  const avatarText =
+    activeItem.avatar ||
+    (activeItem.author
+      ? activeItem.author
+          .split(" ")
+          .map((n) => n[0])
+          .join("")
+          .slice(0, 2)
+          .toUpperCase()
+      : "VZ");
 
   return (
     <section className="testimonial section-wrap section-pad" id="testimonials">
@@ -92,7 +108,7 @@ export function TestimonialSection() {
           <div className="quote-mark">“</div>
           <div className="carousel-controls">
             <span className="carousel-counter">
-              <strong>{activeItem.id}</strong> / 0{TESTIMONIALS.length}
+              <strong>{displayId}</strong> / {String(list.length).padStart(2, "0")}
             </span>
             <div className="carousel-nav-btns">
               <button
@@ -118,7 +134,7 @@ export function TestimonialSection() {
         <div className="testimonial-stage">
           <AnimatePresence mode="wait">
             <motion.div
-              key={current}
+              key={safeIdx}
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -14 }}
@@ -127,30 +143,36 @@ export function TestimonialSection() {
             >
               <blockquote>{activeItem.quote}</blockquote>
               <div className="quote-author">
-                <span className="author-avatar">{activeItem.avatar}</span>
+                <span className="author-avatar">{avatarText}</span>
                 <div>
                   <b>{activeItem.author}</b>
                   <span>{activeItem.role}</span>
                 </div>
-                <span className="quote-source">{activeItem.source}</span>
+                {activeItem.source && (
+                  <span className="quote-source">{activeItem.source}</span>
+                )}
               </div>
             </motion.div>
           </AnimatePresence>
         </div>
 
         <div className="carousel-pagination">
-          {TESTIMONIALS.map((item, idx) => (
-            <button
-              key={item.id}
-              type="button"
-              className={`carousel-dot ${idx === current ? "active" : ""}`}
-              onClick={() => setCurrent(idx)}
-              aria-label={`Go to testimonial ${item.id} by ${item.author}`}
-            >
-              <span className="dot-label">{item.id} · {item.author.split(" ")[0]}</span>
-              <span className="dot-bar" />
-            </button>
-          ))}
+          {list.map((item, idx) => {
+            const num = item.idNumber || String(idx + 1).padStart(2, "0");
+            const first = item.author.split(" ")[0];
+            return (
+              <button
+                key={item.id ?? idx}
+                type="button"
+                className={`carousel-dot ${idx === safeIdx ? "active" : ""}`}
+                onClick={() => setCurrent(idx)}
+                aria-label={`Go to testimonial ${num} by ${item.author}`}
+              >
+                <span className="dot-label">{num} · {first}</span>
+                <span className="dot-bar" />
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>

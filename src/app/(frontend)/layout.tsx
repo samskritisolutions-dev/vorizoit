@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 
 export const metadata: Metadata = {
   title: "Vorizo Info Tech — Ideas into impact",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default function FrontendLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (

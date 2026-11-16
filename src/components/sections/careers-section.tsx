@@ -3,7 +3,17 @@
 import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "../reveal";
 
-const jobs = [
+export interface JobItem {
+  id?: string | number;
+  title: string;
+  department?: string | null;
+  type?: string | null;
+  location?: string | null;
+  desc?: string | null;
+  description?: string | null;
+}
+
+const defaultJobs: JobItem[] = [
   {
     title: "Software Engineer",
     type: "ENGINEERING",
@@ -24,7 +34,9 @@ const jobs = [
   },
 ];
 
-export function CareersSection() {
+export function CareersSection({ items }: { items?: JobItem[] }) {
+  const jobList = items && items.length > 0 ? items : defaultJobs;
+
   return (
     <section className="careers section-pad" id="careers">
       <div className="section-wrap">
@@ -54,26 +66,32 @@ export function CareersSection() {
           </Reveal>
         </div>
         <div className="job-list">
-          {jobs.map((job, idx) => (
-            <Reveal key={job.title} delay={idx * 0.08} className="job-card">
-              <div className="job-main">
-                <span className="job-type">{job.type}</span>
-                <h3>{job.title}</h3>
-                <p>{job.desc}</p>
-              </div>
-              <div className="job-action-wrap">
-                <span className="job-meta">{job.location}</span>
-                <a
-                  href={`mailto:rakeshm@vorizoit.com?subject=${encodeURIComponent(`${job.title} Application`)}`}
-                  aria-label={`Apply for ${job.title}`}
-                  className="job-apply-link"
-                >
-                  <span>Apply</span>
-                  <ArrowUpRight size={15} />
-                </a>
-              </div>
-            </Reveal>
-          ))}
+          {jobList.map((job, idx) => {
+            const badgeType = job.department || job.type || "OPPORTUNITY";
+            const locationText = job.location || "HYDERABAD / FLEXIBLE";
+            const jobSummary = job.description || job.desc || "";
+
+            return (
+              <Reveal key={job.id ?? job.title} delay={idx * 0.08} className="job-card">
+                <div className="job-main">
+                  <span className="job-type">{badgeType}</span>
+                  <h3>{job.title}</h3>
+                  <p>{jobSummary}</p>
+                </div>
+                <div className="job-action-wrap">
+                  <span className="job-meta">{locationText}</span>
+                  <a
+                    href={`mailto:rakeshm@vorizoit.com?subject=${encodeURIComponent(`${job.title} Application`)}`}
+                    aria-label={`Apply for ${job.title}`}
+                    className="job-apply-link"
+                  >
+                    <span>Apply</span>
+                    <ArrowUpRight size={15} />
+                  </a>
+                </div>
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>

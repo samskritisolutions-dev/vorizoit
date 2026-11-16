@@ -3,7 +3,14 @@
 import { useState } from "react";
 import { motion } from "motion/react";
 
-const faqs = [
+export interface FaqDoc {
+  id?: string | number;
+  question: string;
+  answer: string;
+  category?: string | null;
+}
+
+const defaultFaqs: [string, string][] = [
   [
     "What IT services do you offer?",
     "Our services include web and mobile app development, cloud deployment and support, custom software solutions, consulting, data strategy, business intelligence and process automation.",
@@ -26,8 +33,13 @@ const faqs = [
   ],
 ];
 
-export function FaqSection() {
+export function FaqSection({ items }: { items?: FaqDoc[] }) {
   const [activeFaq, setActiveFaq] = useState<number | null>(0);
+
+  const faqList: [string, string][] =
+    items && items.length > 0
+      ? items.map((doc) => [doc.question, doc.answer])
+      : defaultFaqs;
 
   return (
     <section className="faq section-pad">
@@ -45,7 +57,7 @@ export function FaqSection() {
           <p>Here are a few things people often ask us.</p>
         </div>
         <div className="faq-list">
-          {faqs.map(([question, answer], i) => (
+          {faqList.map(([question, answer], i) => (
             <div
               className={`faq-item ${activeFaq === i ? "active" : ""}`}
               key={question}

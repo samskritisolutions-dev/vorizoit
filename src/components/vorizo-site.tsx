@@ -8,16 +8,45 @@ import { Footer } from "./footer";
 import { FloatingTop } from "./floating-top";
 import { HeroSection } from "./sections/hero";
 import { AboutSection } from "./sections/about-section";
-import { ServicesSection } from "./sections/services-section";
+import { ServicesSection, type ServiceDoc } from "./sections/services-section";
 import { ExpertiseSection } from "./sections/expertise-section";
-import { IndustriesSection } from "./sections/industries-section";
+import { IndustriesSection, type IndustryDoc } from "./sections/industries-section";
 import { DifferenceSection } from "./sections/difference-section";
-import { CareersSection } from "./sections/careers-section";
-import { TestimonialSection } from "./sections/testimonial-section";
-import { FaqSection } from "./sections/faq-section";
-import { ContactSection } from "./sections/contact-section";
+import { CareersSection, type JobItem } from "./sections/careers-section";
+import { TestimonialSection, type TestimonialItem } from "./sections/testimonial-section";
+import { FaqSection, type FaqDoc } from "./sections/faq-section";
+import { ContactSection, type ContactSettings } from "./sections/contact-section";
 
-export default function VorizoSite() {
+export interface SiteSettingsDoc extends ContactSettings {
+  announcementText?: string | null;
+  announcementRight?: string | null;
+  announcement?: string | null;
+  heroHeadline?: string | null;
+  heroHeadlineAccent?: string | null;
+  heroIntro?: string | null;
+  aboutLead?: string | null;
+  aboutBody1?: string | null;
+  aboutBody2?: string | null;
+  aboutImage?: string | null;
+}
+
+export interface VorizoSiteProps {
+  initialTestimonials?: TestimonialItem[];
+  initialJobs?: JobItem[];
+  initialServices?: ServiceDoc[];
+  initialIndustries?: IndustryDoc[];
+  initialFaqs?: FaqDoc[];
+  initialSettings?: SiteSettingsDoc | null;
+}
+
+export default function VorizoSite({
+  initialTestimonials,
+  initialJobs,
+  initialServices,
+  initialIndustries,
+  initialFaqs,
+  initialSettings,
+}: VorizoSiteProps) {
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.15,
@@ -41,20 +70,23 @@ export default function VorizoSite() {
     };
   }, []);
 
+  const announcement =
+    initialSettings?.announcementText || initialSettings?.announcement;
+
   return (
     <>
-      <Header />
+      <Header announcement={announcement} />
       <main>
         <HeroSection />
         <AboutSection />
-        <ServicesSection />
+        <ServicesSection items={initialServices} />
         <ExpertiseSection />
-        <IndustriesSection />
+        <IndustriesSection items={initialIndustries} />
         <DifferenceSection />
-        <CareersSection />
-        <TestimonialSection />
-        <FaqSection />
-        <ContactSection />
+        <CareersSection items={initialJobs} />
+        <TestimonialSection items={initialTestimonials} />
+        <FaqSection items={initialFaqs} />
+        <ContactSection settings={initialSettings} />
       </main>
       <Footer />
       <FloatingTop />
