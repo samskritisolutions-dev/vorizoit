@@ -1,5 +1,5 @@
-import { sqliteAdapter } from '@payloadcms/db-sqlite';
 import { postgresAdapter } from '@payloadcms/db-postgres';
+import { sqliteAdapter } from '@payloadcms/db-sqlite';
 import { lexicalEditor } from '@payloadcms/richtext-lexical';
 import path from 'path';
 import { buildConfig } from 'payload';
@@ -17,7 +17,10 @@ import { seedInitialContent } from './lib/seed';
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const databaseUri = process.env.DATABASE_URI || 'file:./vorizo.db';
+const databaseUri =
+  process.env.DATABASE_URI ||
+  'postgresql://postgres.lytvmfjwlszazxwdqbcc:b5SRRp6Q2R6qgKve@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres';
+
 const isPostgres =
   databaseUri.startsWith('postgres://') ||
   databaseUri.startsWith('postgresql://');
@@ -26,19 +29,21 @@ const getServerURL = () => {
   if (process.env.NEXT_PUBLIC_SERVER_URL) return process.env.NEXT_PUBLIC_SERVER_URL;
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
-  return 'http://localhost:3000';
+  return 'http://localhost:3001';
 };
 
 export default buildConfig({
   serverURL: getServerURL(),
   cors: [
     getServerURL(),
+    'http://localhost:3000',
     'https://vorizoit.vercel.app',
     'https://vorizoit.com',
     'https://www.vorizoit.com',
   ],
   csrf: [
     getServerURL(),
+    'http://localhost:3000',
     'https://vorizoit.vercel.app',
     'https://vorizoit.com',
     'https://www.vorizoit.com',
@@ -58,7 +63,7 @@ export default buildConfig({
   editor: lexicalEditor(),
   secret:
     process.env.PAYLOAD_SECRET ||
-    'f3b1456d98c249a0b12e4d56789abcdef0123456789abcdef0123456789abcdef',
+    '9f8b4a72d1e0c3b5a8f7e6d5c4b3a291f0e9d8c7b6a5',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -72,7 +77,7 @@ export default buildConfig({
               ? { rejectUnauthorized: false }
               : undefined,
         },
-        push: true,
+        push: false, // Schema is already migrated and live in Supabase
       })
     : sqliteAdapter({
         client: {

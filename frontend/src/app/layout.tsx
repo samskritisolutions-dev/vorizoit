@@ -1,20 +1,20 @@
 /* eslint-disable @next/next/no-page-custom-font */
-import type { Metadata } from "next";
-import "../globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 
 export const metadata: Metadata = {
-  title: "Vorizo Info Tech — Ideas into impact",
+  title: 'Vorizo Info Tech — Ideas into impact',
   description:
-    "Innovative software, cloud, data and consulting for real business outcomes.",
-  metadataBase: new URL("https://vorizoit.com"),
+    'Innovative software, cloud, data and consulting for real business outcomes.',
+  metadataBase: new URL('https://vorizoit.com'),
   openGraph: {
-    title: "Vorizo Info Tech — Ideas into impact",
-    description: "Technology with purpose.",
-    type: "website",
+    title: 'Vorizo Info Tech — Ideas into impact',
+    description: 'Technology with purpose.',
+    type: 'website',
   },
 };
 
-export default function FrontendLayout({
+export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (

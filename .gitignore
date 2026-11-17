@@ -1,10 +1,41 @@
+# Dependencies
 node_modules
+/.pnp
+.pnp.js
+
+# Build outputs
 .next
 out
-tsconfig.tsbuildinfo
+build
+dist
+
+# Environment variables
+.env*.local
+.env
+!.env.example
+frontend/.env
+frontend/.env*.local
+!frontend/.env.example
+backend/.env
+backend/.env*.local
+!backend/.env.example
+
+# Database files
 *.db
 *.db-shm
 *.db-wal
-.env*
-!.env.example
+
+# TypeScript & Cache
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel
+
+# OS
 .DS_Store
+Thumbs.db
