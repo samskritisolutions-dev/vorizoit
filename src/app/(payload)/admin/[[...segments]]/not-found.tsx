@@ -15,13 +15,12 @@ type Args = {
 export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
   generatePageMetadata({ config: configPromise, params, searchParams });
 
-const NotFound = async ({ params, searchParams }: Args) => {
-  return NotFoundPage({
+const NotFound = ({ params, searchParams }: Args) =>
+  NotFoundPage({
     config: configPromise,
     params,
     searchParams,
     importMap,
   });
-};
 
 export default NotFound;

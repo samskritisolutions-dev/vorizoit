@@ -22,7 +22,27 @@ const isPostgres =
   databaseUri.startsWith('postgres://') ||
   databaseUri.startsWith('postgresql://');
 
+const getServerURL = () => {
+  if (process.env.NEXT_PUBLIC_SERVER_URL) return process.env.NEXT_PUBLIC_SERVER_URL;
+  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  return 'http://localhost:3000';
+};
+
 export default buildConfig({
+  serverURL: getServerURL(),
+  cors: [
+    getServerURL(),
+    'https://vorizoit.vercel.app',
+    'https://vorizoit.com',
+    'https://www.vorizoit.com',
+  ],
+  csrf: [
+    getServerURL(),
+    'https://vorizoit.vercel.app',
+    'https://vorizoit.com',
+    'https://www.vorizoit.com',
+  ],
   admin: {
     user: Users.slug,
     importMap: {
