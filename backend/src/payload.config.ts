@@ -12,7 +12,6 @@ import { Services } from './collections/Services';
 import { Testimonials } from './collections/Testimonials';
 import { Users } from './collections/Users';
 import { SiteSettings } from './globals/SiteSettings';
-import { seedInitialContent } from './lib/seed';
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -26,9 +25,9 @@ const isPostgres =
   databaseUri.startsWith('postgresql://');
 
 const getServerURL = () => {
-  if (process.env.NEXT_PUBLIC_SERVER_URL) return process.env.NEXT_PUBLIC_SERVER_URL;
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+  if (process.env.NEXT_PUBLIC_SERVER_URL) return process.env.NEXT_PUBLIC_SERVER_URL;
   return 'http://localhost:3001';
 };
 
@@ -37,14 +36,20 @@ export default buildConfig({
   cors: [
     getServerURL(),
     'http://localhost:3000',
+    'http://localhost:3001',
     'https://vorizoit.vercel.app',
+    'https://vorizoit-backend.vercel.app',
+    'https://vorizo-backend.vercel.app',
     'https://vorizoit.com',
     'https://www.vorizoit.com',
   ],
   csrf: [
     getServerURL(),
     'http://localhost:3000',
+    'http://localhost:3001',
     'https://vorizoit.vercel.app',
+    'https://vorizoit-backend.vercel.app',
+    'https://vorizo-backend.vercel.app',
     'https://vorizoit.com',
     'https://www.vorizoit.com',
   ],
@@ -54,9 +59,6 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
     suppressHydrationWarning: true,
-  },
-  async onInit(payload) {
-    await seedInitialContent(payload);
   },
   collections: [Users, Testimonials, Jobs, Services, Industries, Faqs],
   globals: [SiteSettings],
@@ -76,8 +78,11 @@ export default buildConfig({
             databaseUri.includes('pooler.supabase.com')
               ? { rejectUnauthorized: false }
               : undefined,
+          connectionTimeoutMillis: 10000,
+          idleTimeoutMillis: 10000,
+          max: 10,
         },
-        push: false, // Schema is already migrated and live in Supabase
+        push: false,
       })
     : sqliteAdapter({
         client: {
