@@ -16,9 +16,18 @@ import { SiteSettings } from './globals/SiteSettings';
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
-const databaseUri =
+let databaseUri =
   process.env.DATABASE_URI ||
-  'postgresql://postgres.lytvmfjwlszazxwdqbcc:b5SRRp6Q2R6qgKve@aws-1-ap-southeast-1.pooler.supabase.com:5432/postgres';
+  'postgresql://postgres.lytvmfjwlszazxwdqbcc:b5SRRp6Q2R6qgKve@aws-1-ap-southeast-1.pooler.supabase.com:6543/postgres';
+
+// On serverless (Vercel), port 5432 hits (EMAXCONNSESSION) max 15 clients limit.
+// Automatically route through Supabase Transaction Pooler (port 6543) which supports thousands of concurrent connections.
+if (databaseUri.includes('pooler.supabase.com:5432')) {
+  databaseUri = databaseUri.replace(
+    'pooler.supabase.com:5432',
+    'pooler.supabase.com:6543'
+  );
+}
 
 const isPostgres =
   databaseUri.startsWith('postgres://') ||
@@ -78,9 +87,9 @@ export default buildConfig({
             databaseUri.includes('pooler.supabase.com')
               ? { rejectUnauthorized: false }
               : undefined,
+          max: 2,
+          idleTimeoutMillis: 1000,
           connectionTimeoutMillis: 10000,
-          idleTimeoutMillis: 10000,
-          max: 10,
         },
         push: false,
       })
