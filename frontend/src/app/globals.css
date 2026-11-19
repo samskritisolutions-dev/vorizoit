@@ -121,7 +121,28 @@ a {
 .brand {
     display: flex;
     align-items: center;
-    gap: 10px
+    gap: 10px;
+    text-decoration: none;
+}
+
+.brand-logo-img {
+    height: 40px;
+    width: auto;
+    max-height: 44px;
+    display: block;
+    object-fit: contain;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.brand:hover .brand-logo-img {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .brand-logo-img {
+        height: 32px;
+    }
 }
 
 .brand-mark {

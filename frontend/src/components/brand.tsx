@@ -1,16 +1,20 @@
+import Image from "next/image";
+
 export function Brand({ footer = false }: { footer?: boolean }) {
   return (
     <a
       className={`brand ${footer ? "brand-footer" : ""}`}
       href="#top"
-      aria-label="Vorizo home"
+      aria-label="Vorizo Info Tech home"
     >
-      <span className="brand-mark">
-        v<span>.</span>
-      </span>
-      <span className="brand-name">
-        vorizo<small>INFO TECH</small>
-      </span>
+      <Image
+        src={footer ? "/logo-white.svg" : "/logo.svg"}
+        alt="Vorizo Info Tech"
+        width={footer ? 155 : 165}
+        height={42}
+        priority
+        className="brand-logo-img"
+      />
     </a>
   );
 }

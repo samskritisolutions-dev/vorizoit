@@ -7,6 +7,11 @@ export const metadata: Metadata = {
   description:
     'Innovative software, cloud, data and consulting for real business outcomes.',
   metadataBase: new URL('https://vorizoit.com'),
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     title: 'Vorizo Info Tech — Ideas into impact',
     description: 'Technology with purpose.',
@@ -20,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
